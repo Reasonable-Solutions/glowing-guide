@@ -1,18 +1,16 @@
 type state = {expanded: bool};
-type action = Toggle(bool);
+type action =
+  | Toggle;
 
 [@react.component]
 let make = (~children, ~title) => {
-    let (state, dispatch) =
+  let (state, dispatch) =
     React.useReducer(
-      (_state, action) =>
-        switch (action) {
-        | Toogle(e) => {expanded: not(state.expanded)}
+      (state, action) =>
+        switch ((action: action)) {
+        | Toggle => {expanded: (!state.expanded)}
         },
       {expanded: false},
-    ); 
-    <div>
-    <h2>{ReasonReact.string(title)}</h2>
-    children
-    </div>
-}
+    );
+  <div> <h2> {ReasonReact.string(title)} </h2> children </div>;
+};

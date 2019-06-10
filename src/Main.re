@@ -7,11 +7,6 @@ type state = {
 type action =
   | Upload(string) 
 
-
-type something =
-  | Nothing
-  | Just(string);
-
 module M = {
   [@bs.val] [@bs.scope "URL"]
   external createObjectURL: Webapi.File.t => string = "";
@@ -25,18 +20,6 @@ module Styles = {
     display(flexBox),
     background(rgba(60,60,60, 0.1))
   ]);
-
-  let title = style([
-    fontSize(rem(1.5)),
-   ]);
-
-  let actionButton = disabled =>
-    style([
-      background(disabled ? darkgray : white),
-      color(black),
-      border(px(1), solid, black),
-      borderRadius(px(3)),
-    ])
 };
 
 /* <div className=Styles.card>
@@ -56,7 +39,7 @@ let make = () => {
     );
   <div className=Styles.main>
     <div>
-      <Button text={"foo"} cb={(e) => dispatch(Upload("bar"))}/>
+      <Button text={"foo"} cb={(_) => dispatch(Upload("bar"))}/>
       <input
         type_="file"
         onChange={event => {
