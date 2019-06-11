@@ -2,7 +2,7 @@ type state = option(string);
 type action =
   | Upload(string);
 
-module M = {
+module Url = {
   [@bs.val] [@bs.scope "URL"]
   external createObjectURL: Webapi.File.t => string = "";
 };
@@ -22,7 +22,7 @@ let make = (~upload) => {
       type_="file"
       onChange={event => {
         let f = ReactEvent.Form.target(event)##files;
-        upload(M.createObjectURL(f[0]));
+        upload(Url.createObjectURL(f[0]));
         dispatch(Upload(f[0]##name));
       }}
     />
