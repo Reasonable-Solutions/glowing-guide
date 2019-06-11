@@ -9,15 +9,12 @@ type action =
 module Styles = {
   open Css;
   global("body", [margin(px(-1))]);
+  global("*", [boxSizing(borderBox), fontFamily("Helvetica Neue, Segoe UI, arial, sans-serif")]);
+
   let main = style([display(flexBox), background(rgba(60, 60, 60, 0.1))]);
   let sidebar = style([]);
   let content = style([]);
 };
-
-/* <div className=Styles.card>
-     <h1 className=Styles.title> (ReasonReact.stringToElement("Hello")) </h1>
-     <button className=Styles.actionButton(false)>
-   </div> */
 
 [@react.component]
 let make = () => {
