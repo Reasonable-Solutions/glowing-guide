@@ -1,4 +1,4 @@
-type state = { expanded: bool };
+type state = {expanded: bool};
 type action =
   | Toggle;
 
@@ -6,7 +6,24 @@ module Styles = {
   open Css;
   let expanded = style([maxHeight(pct(100.0))]);
   let notExpanded = style([maxHeight(pct(0.0)), display(none)]);
+  let button =
+    style([
+      width(pct(100.0)),
+      border(px(0), none, black),
+      background(none),
+      textAlign(`left),
+      padding2(px(20), px(10)),
+    ]);
+  let content =
+    style([
+      paddingLeft(px(20)),
+      paddingBottom(px(10)),
+      marginBottom(px(-1)),
+    ]);
+  let main = style([borderTop(px(1), solid, black)]);
+  let chevron = style([display(inlineBlock), height(px(20))]);
 };
+
 [@react.component]
 let make = (~children, ~title) => {
   let (state, dispatch) =
@@ -17,15 +34,14 @@ let make = (~children, ~title) => {
         },
       {expanded: false},
     );
-  <div className="menuExpander">
+  <div className=Styles.main>
     <button
-      type_="button"
-      className="minus expanderButton"
-      onClick={_e => dispatch(Toggle)}>
+      type_="button" className=Styles.button onClick={_e => dispatch(Toggle)}>
       {ReasonReact.string(title)}
+      <Chevron style=Styles.chevron />
     </button>
     <div className={state.expanded ? Styles.expanded : Styles.notExpanded}>
-      <div className="content"> {children} </div>
+      <div className=Styles.content> children </div>
     </div>
   </div>;
 };

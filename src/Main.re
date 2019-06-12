@@ -12,7 +12,7 @@ module Styles = {
   global("*", [boxSizing(borderBox), fontFamily("Helvetica Neue, Segoe UI, arial, sans-serif")]);
 
   let main = style([display(flexBox), background(rgba(60, 60, 60, 0.1))]);
-  let sidebar = style([]);
+  let sidebar = style([borderRight(px(2), solid, black), width(px(340))]);
   let content = style([]);
 };
 
