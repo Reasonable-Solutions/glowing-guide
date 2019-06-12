@@ -11,7 +11,7 @@ module Styles = {
   global("body", [margin(px(-1))]);
   global("*", [boxSizing(borderBox), fontFamily("Helvetica Neue, Segoe UI, arial, sans-serif")]);
 
-  let main = style([display(flexBox), background(hex("f5f5f5"))]);
+  let main = style([display(flexBox), background(Theme.grey)]);
   let sidebar = style([borderRight(px(1), solid, hex("d1d8db")), width(px(340))]);
   let content = style([]);
 };
