@@ -8,11 +8,14 @@ module Styles = {
   let notExpanded = style([maxHeight(pct(0.0)), display(none)]);
   let button =
     style([
+      color(Theme.dBlue),
       width(pct(100.0)),
       border(px(0), none, black),
       background(none),
       textAlign(`left),
       padding2(px(20), px(10)),
+      display(`flex),
+      justifyContent(`spaceBetween),
     ]);
   let content =
     style([
@@ -20,8 +23,13 @@ module Styles = {
       paddingBottom(px(10)),
       marginBottom(px(-1)),
     ]);
-  let main = style([borderTop(px(1), solid, black)]);
-  let chevron = style([display(inlineBlock), height(px(20))]);
+  let main = style([borderTop(px(1), solid, hex("d1d8db"))]);
+  let chevron =
+    style([
+      display(inlineBlock),
+      height(px(20)),
+      unsafe("fill", "rgb(0, 139, 206)"),
+    ]);
 };
 
 [@react.component]
