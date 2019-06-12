@@ -48,7 +48,7 @@ let make = (~children, ~title) => {
       {ReasonReact.string(title)}
       <Chevron style=Styles.chevron />
     </button>
-    <div className={state.expanded ? Styles.expanded : Styles.notExpanded}>
+    <div className={state.expanded ? Styles.expanded : Styles.notExpanded} ariaExpanded={state.expanded}>
       <div className=Styles.content> children </div>
     </div>
   </div>;
