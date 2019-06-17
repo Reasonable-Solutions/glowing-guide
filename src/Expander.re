@@ -28,9 +28,10 @@ module Styles = {
     display(inlineBlock),
     height(px(20)),
     unsafe("fill", "rgb(0, 139, 206)"),
+    transform(rotateZ(deg(90))),
   ];
   let chevron = style(chR);
-  let chevronDown = style(chR @ [transform(rotateZ(deg(90)))]);
+  let chevronDown = style(chR @ [transform(rotateZ(deg(270)))]);
 };
 
 [@react.component]
