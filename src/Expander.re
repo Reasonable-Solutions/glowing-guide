@@ -6,16 +6,23 @@ module Styles = {
   open Css;
   let expanded = style([maxHeight(pct(100.0))]);
   let notExpanded = style([maxHeight(pct(0.0)), display(none)]);
+  let title =
+    style([
+      fontWeight(`bold),
+      fontSize(px(16)),
+      marginLeft(px(20)),
+      color(Theme.textBlack),
+      flexGrow(5.0),
+      hover([textDecoration(underline)]),
+    ]);
   let button =
     style([
-      color(Theme.dBlue),
       width(pct(100.0)),
       border(px(0), none, black),
       background(none),
       textAlign(`left),
       padding2(px(20), px(10)),
       display(`flex),
-      justifyContent(`spaceBetween),
     ]);
   let content =
     style([
@@ -47,8 +54,8 @@ let make = (~children, ~title) => {
   <div className=Styles.main>
     <button
       type_="button" className=Styles.button onClick={_e => dispatch(Toggle)}>
-      {ReasonReact.string(title)}
       <Chevron style=Styles.(state.expanded ? chevronDown : chevron) />
+      <span className=Styles.title> {ReasonReact.string(title)} </span>
     </button>
     <div
       className={state.expanded ? Styles.expanded : Styles.notExpanded}
