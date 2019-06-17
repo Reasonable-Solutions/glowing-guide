@@ -36,7 +36,7 @@ let make = () => {
         | Upload(url) => {...state, file: url}
         | UpdateText(title) => {...state, title}
         },
-      {file: "", title: "foo"},
+      {file: "", title: ""},
     );
   <div className=Styles.main>
     <div className=Styles.sidebar>

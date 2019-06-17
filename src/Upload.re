@@ -7,9 +7,16 @@ module Url = {
   external createObjectURL: Webapi.File.t => string = "";
 };
 
+let stopAll = e => {
+  ReactEvent.Mouse.preventDefault(e);
+  ReactEvent.Mouse.stopPropagation(e);
+};
+
 module Styles = {
   open Css;
-  let dropArea = style([background(goldenrod), padding(px(60))]);
+  let dropArea =
+    style([background(goldenrod), padding(px(60)), display(block)]);
+  let upload = style([display(none)]);
 };
 [@react.component]
 let make = (~upload) => {
@@ -24,18 +31,24 @@ let make = (~upload) => {
   <div>
     <label
       className=Styles.dropArea
+      onDragOver={(event: ReactEvent.Mouse.t) => stopAll(event)}
+      onDragEnter={event => stopAll(event)}
+      onDragLeave={event => stopAll(event)}
       onDrop={event => {
+        stopAll(event);
         ReactEvent.Mouse.preventDefault(event);
-        ReactEvent.Mouse.stopPropagation(event);
         let e = ReactEvent.Synthetic.nativeEvent(event);
         let files = e##dataTransfer##files;
+        Js.log(files);
         upload(Url.createObjectURL(files[0]));
         dispatch(Upload(files[0]##name));
       }}>
-      {ReasonReact.string("drop")}
       <input
+        className=Styles.upload
         type_="file"
         onChange={event => {
+          ReactEvent.Form.preventDefault(event);
+          ReactEvent.Form.stopPropagation(event);
           let f = ReactEvent.Form.target(event)##files;
           upload(Url.createObjectURL(f[0]));
           dispatch(Upload(f[0]##name));
