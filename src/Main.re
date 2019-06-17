@@ -43,14 +43,11 @@ let make = () => {
       <Expander title="Image upload">
         <Upload upload={e => dispatch(Upload(e))} />
       </Expander>
-      <Expander title="Title">
+      <Expander title="Title text">
         <div>
-          <input
-            type_="text"
-            placeholder="Title text"
-            onChange={e =>
-              dispatch(UpdateText(ReactEvent.Form.target(e)##value))
-            }
+          <TitleInput
+            startText="placeholder text, my fren"
+            update={s => dispatch(UpdateText(s))}
           />
         </div>
       </Expander>
