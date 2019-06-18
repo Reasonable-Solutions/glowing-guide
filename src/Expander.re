@@ -27,6 +27,7 @@ module Styles = {
   let content =
     style([
       paddingLeft(px(20)),
+      paddingRight(px(20)),
       paddingBottom(px(10)),
       marginBottom(px(-1)),
     ]);
@@ -38,7 +39,8 @@ module Styles = {
     transform(rotateZ(deg(90))),
   ];
   let chevron = style(chR);
-  let chevronDown = style(chR @ [transform(rotateZ(deg(270)))]);
+  let chevronDown =
+    merge([chevron, style([transform(rotateZ(deg(270)))])]);
 };
 
 [@react.component]

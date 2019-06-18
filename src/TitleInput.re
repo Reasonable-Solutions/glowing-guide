@@ -2,7 +2,16 @@ type action =
   | Update(string);
 type state = {text: string};
 module Styles = {
-  let t = 5;
+  open Css;
+  let input =
+    style([
+      border(px(1), solid, black),
+      borderRadius(px(5)),
+      lineHeight(rem(1.0)),
+      maxWidth(pct(100.0)),
+      fontSize(rem(1.5)),
+      padding4(rem(0.75), rem(0.0), rem(0.75), rem(1.25)),
+    ]);
 };
 
 [@react.component]
@@ -17,6 +26,7 @@ let make = (~update, ~startText) => {
     );
   <div>
     <input
+      className=Styles.input
       type_="text"
       placeholder=startText
       onChange={e => {

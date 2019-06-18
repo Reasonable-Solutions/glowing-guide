@@ -1,6 +1,7 @@
 type state = option(string);
 type action =
-  | Upload(string);
+  | Upload(string)
+  | Delete(string);
 
 module Url = {
   [@bs.val] [@bs.scope "URL"]
@@ -15,16 +16,24 @@ let stopAll = e => {
 module Styles = {
   open Css;
   let dropArea =
-    style([background(goldenrod), padding(px(60)), display(block)]);
+    style([
+      background(Theme.lBlue),
+      padding(px(60)),
+      display(block),
+      borderRadius(px(5)),
+      boxShadow(~y=px(1), ~blur=px(2), rgba(0, 0, 0, 0.1)),
+    ]);
   let upload = style([display(none)]);
+  let dropText = style([fontSize(px(16)), color(Theme.textBlack)]);
 };
 [@react.component]
-let make = (~upload) => {
+let make = (~upload, ~delete) => {
   let (state, dispatch) =
     React.useReducer(
       (_state, action) =>
         switch (action) {
         | Upload(filename) => Some(filename)
+        | Delete(filename) => None
         },
       None,
     );
@@ -43,6 +52,7 @@ let make = (~upload) => {
         upload(Url.createObjectURL(files[0]));
         dispatch(Upload(files[0]##name));
       }}>
+      <span className=Styles.dropText> {React.string("Add file")} </span>
       <input
         className=Styles.upload
         type_="file"
@@ -57,7 +67,17 @@ let make = (~upload) => {
     </label>
     {switch (state) {
      | None => ReasonReact.null
-     | Some(file) => <p> {ReasonReact.string(file)} </p>
+     | Some(file) =>
+       <div>
+         <p> {ReasonReact.string(file)} </p>
+         <button
+           onClick={e => {
+             dispatch(Delete(file));
+             delete(file);
+           }}>
+           {React.string("X")}
+         </button>
+       </div>
      }}
   </div>;
 };

@@ -1,17 +1,18 @@
 /* State declaration */
 type state = {
-  file: string,
+  file: option(string),
   title: string,
 };
 
 /* Action declaration */
 type action =
-  | Upload(string)
+  | UploadFile(string)
+  | DeleteFile(string)
   | UpdateText(string);
 
 module Styles = {
   open Css;
-  global("body", [margin(px(-1))]);
+  global("body", [margin(px(0))]);
   global(
     "*",
     [
@@ -33,27 +34,34 @@ let make = () => {
     React.useReducer(
       (state, action) =>
         switch (action) {
-        | Upload(url) => {...state, file: url}
+        | UploadFile(url) => {...state, file: Some(url)}
+        | DeleteFile(url) => {...state, file: None}
         | UpdateText(title) => {...state, title}
         },
-      {file: "", title: ""},
+      {file: None, title: ""},
     );
   <div className=Styles.main>
     <div className=Styles.sidebar>
       <Expander title="Image upload">
-        <Upload upload={e => dispatch(Upload(e))} />
+        <Upload
+          upload={e => dispatch(UploadFile(e))}
+          delete={e => dispatch(DeleteFile(e))}
+        />
       </Expander>
       <Expander title="Title text">
         <div>
           <TitleInput
-            startText="placeholder text, my fren"
+            startText="title text"
             update={s => dispatch(UpdateText(s))}
           />
         </div>
       </Expander>
     </div>
     <div className=Styles.content> {ReasonReact.string("content")} </div>
-    <img src={state.file} />
+    {switch (state.file) {
+     | None => ReasonReact.null
+     | Some(file) => <img src=file />
+     }}
     <h1> {ReasonReact.string(state.title)} </h1>
   </div>;
 };
