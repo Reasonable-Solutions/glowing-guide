@@ -35,7 +35,7 @@ let make = () => {
       (state, action) =>
         switch (action) {
         | UploadFile(url) => {...state, file: Some(url)}
-        | DeleteFile(url) => {...state, file: None}
+        | DeleteFile(_url) => {...state, file: None}
         | UpdateText(title) => {...state, title}
         },
       {file: None, title: ""},
