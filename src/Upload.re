@@ -1,6 +1,10 @@
-type state = option(string);
+type state = {
+  file: option(string),
+  valid: bool,
+};
 type action =
   | Upload(string)
+  | ValidDrag(bool)
   | Delete(string);
 
 module Url = {
@@ -30,25 +34,37 @@ module Styles = {
 let make = (~upload, ~delete) => {
   let (state, dispatch) =
     React.useReducer(
-      (_state, action) =>
+      (state, action) =>
         switch (action) {
-        | Upload(filename) => Some(filename)
-        | Delete(filename) => None
+        | Upload(filename) => {...state, file: Some(filename)}
+        | Delete(filename) => {...state, file: None}
+        | ValidDrag(p) => {...state, valid: p}
         },
-      None,
+      {file: None, valid: true},
     );
   <div>
     <label
       className=Styles.dropArea
       onDragOver={(event: ReactEvent.Mouse.t) => stopAll(event)}
-      onDragEnter={event => stopAll(event)}
+      onDragEnter={event => {
+        let items =
+          ReactEvent.Synthetic.nativeEvent(event)##dataTransfer##items;
+        if (items
+            |> List.filter(a => a##_type != "image/png")
+            |> (l => List.length(l) == 0)) {
+          stopAll(
+            event // this is about signaling that the <label> is a valid dropTarget for only images
+          );
+          dispatch(ValidDrag(true));
+        } else {
+          dispatch(ValidDrag(false));
+        };
+      }}
       onDragLeave={event => stopAll(event)}
       onDrop={event => {
         stopAll(event);
-        ReactEvent.Mouse.preventDefault(event);
         let e = ReactEvent.Synthetic.nativeEvent(event);
         let files = e##dataTransfer##files;
-        Js.log(files);
         upload(Url.createObjectURL(files[0]));
         dispatch(Upload(files[0]##name));
       }}>
@@ -65,7 +81,7 @@ let make = (~upload, ~delete) => {
         }}
       />
     </label>
-    {switch (state) {
+    {switch (state.file) {
      | None => ReasonReact.null
      | Some(file) =>
        <div>
