@@ -19,7 +19,8 @@ let stopAll = e => {
 
 module Styles = {
   open Css;
-  let dropArea =
+  let delete = style([display(inlineBlock)]);
+  let dropStyle =
     style([
       background(Theme.lBlue),
       padding(px(60)),
@@ -27,6 +28,13 @@ module Styles = {
       borderRadius(px(5)),
       boxShadow(~y=px(1), ~blur=px(2), rgba(0, 0, 0, 0.1)),
     ]);
+
+  let dropArea = valid =>
+    switch (valid) {
+    | false => merge([dropStyle, style([background(red)])])
+    | true => merge([dropStyle])
+    };
+
   let upload = style([display(none)]);
   let dropText = style([fontSize(px(16)), color(Theme.textBlack)]);
 };
@@ -37,14 +45,14 @@ let make = (~upload, ~delete) => {
       (state, action) =>
         switch (action) {
         | Upload(filename) => {...state, file: Some(filename)}
-        | Delete(filename) => {...state, file: None}
+        | Delete(_) => {...state, file: None}
         | ValidDrag(p) => {...state, valid: p}
         },
       {file: None, valid: true},
     );
   <div>
     <label
-      className=Styles.dropArea
+      className={Styles.dropArea(state.valid)}
       onDragOver={(event: ReactEvent.Mouse.t) => stopAll(event)}
       onDragEnter={event => {
         let items =
@@ -57,10 +65,14 @@ let make = (~upload, ~delete) => {
           );
           dispatch(ValidDrag(true));
         } else {
+          ReactEvent.Mouse.stopPropagation(event);
           dispatch(ValidDrag(false));
         };
       }}
-      onDragLeave={event => stopAll(event)}
+      onDragLeave={event => {
+        dispatch(ValidDrag(true));
+        stopAll(event);
+      }}
       onDrop={event => {
         stopAll(event);
         let e = ReactEvent.Synthetic.nativeEvent(event);
@@ -87,7 +99,8 @@ let make = (~upload, ~delete) => {
        <div>
          <p> {ReasonReact.string(file)} </p>
          <button
-           onClick={e => {
+           className=Styles.delete
+           onClick={_e => {
              dispatch(Delete(file));
              delete(file);
            }}>
