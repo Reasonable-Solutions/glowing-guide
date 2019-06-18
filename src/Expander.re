@@ -41,7 +41,7 @@ module Styles = {
   let chevron = style(chR);
   let chevronDown =
     merge([chevron, style([transform(rotateZ(deg(270)))])]);
-};
+
 
 [@react.component]
 let make = (~children, ~title) => {
