@@ -1,1 +1,1 @@
-ReactDOMRe.renderToElementWithId(<Main/>, "index2");
+ReactDOMRe.renderToElementWithId(<Main />, "app");
