@@ -19,14 +19,22 @@ let stopAll = e => {
 
 module Styles = {
   open Css;
-  let delete = style([display(inlineBlock)]);
+  let deleter = style([display(`flex)]);
+  let deleteButton =
+    style([
+      display(inlineBlock),
+      borderStyle(none),
+      background(none),
+      padding4(px(10), px(40), px(10), px(40)),
+      hover([fontWeight(bold)]),
+    ]);
   let dropStyle =
     style([
       background(Theme.lBlue),
       padding(px(60)),
       display(block),
       borderRadius(px(5)),
-      boxShadow(~y=px(1), ~blur=px(2), rgba(0, 0, 0, 0.1)),
+      boxShadow(~y=px(1), ~blur=px(2), Theme.textBlack),
     ]);
 
   let dropArea = valid =>
@@ -60,9 +68,7 @@ let make = (~upload, ~delete) => {
         if (items
             |> List.filter(a => a##_type != "image/png")
             |> (l => List.length(l) == 0)) {
-          stopAll(
-            event // this is about signaling that the <label> is a valid dropTarget for only images
-          );
+          stopAll(event); // this is about signaling that the <label> is a valid dropTarget for only images
           dispatch(ValidDrag(true));
         } else {
           ReactEvent.Mouse.stopPropagation(event);
@@ -96,10 +102,10 @@ let make = (~upload, ~delete) => {
     {switch (state.file) {
      | None => ReasonReact.null
      | Some(file) =>
-       <div>
+       <div className=Styles.deleter>
          <p> {ReasonReact.string(file)} </p>
          <button
-           className=Styles.delete
+           className=Styles.deleteButton
            onClick={_e => {
              dispatch(Delete(file));
              delete(file);
