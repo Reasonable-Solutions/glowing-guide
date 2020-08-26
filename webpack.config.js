@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const outputDir = path.join(__dirname, 'build/');
 
 const isProd = process.env.NODE_ENV === 'production';
-
+const foo = 5;
 module.exports = {
   entry: './src/Index.bs.js',
   mode: isProd ? 'production' : 'development',
